@@ -25,13 +25,13 @@ read START_TIMESTAMP <<< $(echo "00:00:00" | awk -F: '{ print ($1 * 3600) + ($2 
 # Replace "00:00:00" with the ending timestamp of your clip, i.e. "00:01:30"
 read END_TIMESTAMP <<< $(echo "00:00:00" | awk -F: '{ print ($1 * 3600) + ($2 * 60) + $3 }')
 
-# Because FFMPEG relies on duration and not timestamps, this line calculates it for us
+# Because FFmpeg relies on duration and not timestamps, this line calculates it for us
 DURATION="$(($END_TIMESTAMP-$START_TIMESTAMP))"
 
 ffmpeg -ss $START_TIMESTAMP -i $VID_NAME -to $DURATION -filter:v $FILETYPE
 STARTING_FOLDER=$((STARTING_FOLDER+1))
 
-# After FFMPEG has finished processing your video to images, this script will create a new folder for every clip and move the images created into that folder
+# After FFmpeg has finished processing your video to images, this script will create a new folder for every clip and move the images created into that folder
 mkdir $STARTING_FOLDER
 mv *.png $STARTING_FOLDER
 #----------- END CLIP -----------#
