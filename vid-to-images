@@ -1,0 +1,37 @@
+#!/bin/bash
+
+cd # Desired folder path
+
+VID_NAME= # Name of video, i.e. home_movie.mkv
+STARTING_FOLDER=0 # One number less than the number of the first folder you want your images to be moved into (i.e., leave this number at 0 if you would like your first folder to be 1, change it to 10 if you would like your first folder to be 11, and so on). This number must be an integer so it can be incremented later on.
+
+# Uncomment these lines for png output
+FILETYPE=IMG_%05d.png # %05d will output a file name with 5 decimal places, i.e. IMG_00010.png, decrease or increase to your liking
+EXTENSION=*.png
+FPS="fps=25" # This sets the framerate of your images. This varies based on the framerate of your original video, and how you would like your output to look. A smaller number will produce fewer screenshots per video, while a larger number wil produce more.
+
+# Uncomment these lines for jpg output
+# FILETYPE="-q:v 1 IMG_%05d.jpg"
+# EXTENSION=*.jpg
+# FPS="fps=25"
+
+# Copy the section below for as many clips you would like to convert from your original video
+
+#----------- BEGIN CLIP -----------#
+
+# Replace "00:00:00" with the beginning timestamp of your clip, i.e. "00:01:00"
+read START_TIMESTAMP <<< $(echo "00:00:00" | awk -F: '{ print ($1 * 3600) + ($2 * 60) + $3 }')
+
+# Replace "00:00:00" with the ending timestamp of your clip, i.e. "00:01:30"
+read END_TIMESTAMP <<< $(echo "00:00:00" | awk -F: '{ print ($1 * 3600) + ($2 * 60) + $3 }')
+
+# Because FFMPEG relies on duration and not timestamps, this line calculates it for us
+DURATION="$(($END_TIMESTAMP-$START_TIMESTAMP))"
+
+ffmpeg -ss $START_TIMESTAMP -i $VID_NAME -to $DURATION -filter:v $FILETYPE
+STARTING_FOLDER=$((STARTING_FOLDER+1))
+
+# After FFMPEG has finished processing your video to images, this script will create a new folder for every clip and move the images created into that folder
+mkdir $STARTING_FOLDER
+mv *.png $STARTING_FOLDER
+#----------- END CLIP -----------#
