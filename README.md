@@ -1,6 +1,8 @@
 # Image Conversion with FFmpeg
 Bash script for easily converting videos to images in the command line with FFmpeg, using beginning and ending timestamps instead of duration. 
 
+A blog with suggestions for use and detailed directions on how to build your own is available [here](https://medium.com/@marycriv/video-to-image-conversion-in-the-command-line-using-ffmpeg-83dace3409ca).
+
 Requires:
 - [FFmpeg](https://www.ffmpeg.org/)
 
